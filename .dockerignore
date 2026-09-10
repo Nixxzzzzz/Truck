@@ -1,0 +1,16 @@
+.git
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+node_modules
+TruckTrack-Phase1/trucktrack/trucktrack.db
+TruckTrack-Phase1/trucktrack/*.db-journal
+TruckTrack-Phase1/trucktrack/*.sqlite3
+TruckTrack-Phase1/trucktrack/.env
