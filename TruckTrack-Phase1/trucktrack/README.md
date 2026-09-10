@@ -1,6 +1,8 @@
-# TruckTrack — local desktop application
+# TruckTrack
 
-A Python implementation of the attached Truck Journey & Transport Control System specification. Driver punches, truck-code assignment verification, route-based delay calculations, Director overview/analytics/reports, Admin management and auditable corrections are implemented in separate modules.
+TruckTrack is a FastAPI and SQLite transport operations app for driver punches, truck-code assignment verification, route-based delay tracking, director reporting, admin management, and auditable corrections.
+
+This repository is GitHub-ready: it includes Docker deployment files, an Oracle Cloud Always Free guide, a Render blueprint, and GitHub Actions CI.
 
 **Verification status:** 38 rule/security/request-schema tests passed and Python/JavaScript syntax checks passed. Full FastAPI/SQLAlchemy integration, migrations, live startup and browser layout could not be verified in the build environment because dependency installation and browser localhost access were blocked. Read docs/testing.md before treating this as a verified release. No production-readiness certification is claimed.
 
@@ -19,7 +21,26 @@ A Python implementation of the attached Truck Journey & Transport Control System
 FastAPI/Uvicorn server guidance: https://fastapi.tiangolo.com/deployment/manually/
 SQLite foreign-key behavior: https://docs.sqlalchemy.org/en/20/dialects/sqlite.html
 
-This is a local browser-based application powered by Python, not a native Windows executable. Keep the server terminal open while using it. Your laptop's browser is the Phase 1 interface. Mobile/tablet responsiveness is deferred.
+This is a browser-based Python application, not a native Windows executable. Keep the server terminal open while using it. Your laptop's browser is the Phase 1 interface. Mobile/tablet responsiveness is deferred.
+
+## Deployment
+The quickest production-style path is Docker. The repository now includes a container entrypoint that runs migrations, optionally creates the initial admin account from environment variables, and starts Uvicorn on the platform port.
+
+Build and run locally with Docker:
+```powershell
+docker build -t trucktrack .
+docker run --rm -p 8000:8000 `
+	-e DATABASE_URL=sqlite:///./trucktrack.db `
+	-e ALLOWED_HOSTS=localhost,127.0.0.1,testserver `
+	-e ADMIN_USERNAME=admin `
+	-e ADMIN_NAME="TruckTrack Admin" `
+	-e ADMIN_PASSWORD="Change-this-password" `
+	trucktrack
+```
+
+For cloud deployment, set `DATABASE_URL` to a managed PostgreSQL connection string, keep `COOKIE_SECURE=true`, and add your deployed hostname to `ALLOWED_HOSTS`. The included `render.yaml` blueprint is a ready-made Render option using Docker plus a managed database. If you chose Oracle Cloud Always Free, follow [docs/oracle-deployment.md](docs/oracle-deployment.md) instead.
+
+The first deployed boot can create the admin user automatically if `ADMIN_USERNAME`, `ADMIN_NAME`, and `ADMIN_PASSWORD` are provided as secrets. After that, remove those secrets or leave them unset.
 
 ## 1. Extract and open a terminal
 Extract TruckTrack-Phase1.zip. Open a terminal **inside the trucktrack directory**, where requirements.txt and alembic.ini are located. Install Python 3.11 or 3.12 from python.org if needed, with Python added to PATH. You need internet for the first package install.
