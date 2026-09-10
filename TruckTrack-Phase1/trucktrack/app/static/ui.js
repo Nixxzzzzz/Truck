@@ -1,0 +1,20 @@
+import {session} from './api.js';
+export const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const label=x=>String(x).replaceAll('_',' ').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
+export const time=x=>x?new Intl.DateTimeFormat('en-IN',{hour:'2-digit',minute:'2-digit',timeZone:session.timezone}).format(new Date(x)):'—';
+export const stamp=x=>x?new Intl.DateTimeFormat('en-IN',{dateStyle:'medium',timeStyle:'short',timeZone:session.timezone}).format(new Date(x)):'—';
+export const mins=x=>x==null?'—':`${Math.round(x)} min`;
+export const pct=x=>x==null?'—':`${x}%`;
+export const badge=x=>`<span class="badge ${['ON_TIME','COMPLETED','ACTIVE'].includes(x)?'good':['DELAYED','INACTIVE','CANCELLED'].includes(x)?'warn':''}">${esc(label(x||'Unknown'))}</span>`;
+export function toast(message,error=false){const el=document.querySelector('#toast');el.textContent=message;el.className='toast'+(error?' error':'');el.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.hidden=true,6500)}
+export const empty=message=>`<div class="empty">${esc(message)}</div>`;
+export function modal(title,html){document.querySelector('#modal-title').textContent=title;document.querySelector('#modal-content').innerHTML=html;document.querySelector('#modal').showModal()}
+export const closeModal=()=>document.querySelector('#modal').close();
+export const head=(title,subtitle,actions='')=>`<div class="page-head"><div><span class="eyebrow">TRANSPORT CONTROL</span><h1>${esc(title)}</h1><p class="muted">${esc(subtitle)}</p></div><div class="actions">${actions}</div></div>`;
+export const kpi=(name,value,note='')=>`<div class="kpi"><div class="kpi-label">${esc(name)}</div><div class="kpi-value number">${esc(value)}</div><small>${esc(note)}</small></div>`;
+export function timeline(t){const names=[`${t.origin} departure`,`${t.destination} arrival`,`${t.destination} departure`,`${t.origin} arrival`];return `<div class="timeline">${names.map((name,i)=>{const e=t.events[i];return `<div class="timeline-step ${e?'done':''}"><span>${esc(time(e?.event_time))}</span><b>${esc(name)}</b><small>${e?esc(label(e.verification_method)):'Awaiting punch'}</small></div>`}).join('')}</div>`}
+export function tripRows(items){return items.length?`<div class="table-wrap"><table><thead><tr><th>Trip / date</th><th>Truck</th><th>Driver</th><th>Journey</th><th>Travel</th><th>Delay</th><th>Status</th></tr></thead><tbody>${items.map(t=>`<tr data-trip="${t.id}"><td><b>${esc(t.trip_number)}</b><br><span class="muted">${esc(t.trip_date)}</span></td><td>${esc(t.truck.registration_number)}</td><td>${esc(t.driver.name)}</td><td>${esc(t.origin)} → ${esc(t.destination)}<br><span class="muted">${esc(t.current_stage)}</span></td><td>${mins(t.travel_minutes)}</td><td>${mins(t.delay_minutes)}</td><td>${badge(t.status)} ${badge(t.timing_status)}</td></tr>`).join('')}</tbody></table></div>`:empty('No trips match this view.')}
+export function wireTrips(root=document){root.querySelectorAll('[data-trip]').forEach(el=>el.addEventListener('click',()=>location.hash=`trip/${el.dataset.trip}`))}
+export const bars=items=>items.length?items.map(r=>`<div class="bar-row"><div class="bar-title"><span>${esc(r.name)}</span><b>${r.percent}% <span class="muted">· ${r.count}</span></b></div><div class="bar"><progress max="100" value="${r.percent}"></progress></div></div>`).join(''):empty('No delayed travel segments in this range.');
+export async function submitForm(form,action){form.addEventListener('submit',async e=>{e.preventDefault();const button=form.querySelector('[type=submit]');button.disabled=true;const error=form.querySelector('.error');if(error)error.textContent='';try{await action(new FormData(form))}catch(err){if(error)error.textContent=err.message;else toast(err.message,true)}finally{button.disabled=false}})}
+export function options(items,selected,text=x=>x.name){return items.map(x=>`<option value="${x.id}" ${String(selected)===String(x.id)?'selected':''}>${esc(text(x))}</option>`).join('')}

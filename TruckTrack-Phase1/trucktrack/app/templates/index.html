@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TruckTrack · Operations</title><link rel="icon" href="/static/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/static/styles.css"><script type="module" src="/static/app.js"></script></head>
+<body>
+<div id="login-view" class="login-layout">
+<section class="login-story"><a class="brand" href="/">▰ <span>TruckTrack<span class="brand-dot">.</span></span></a><div><span class="eyebrow">TRANSPORT OPERATIONS</span><h1>Every journey.<br>Clearly accounted for.</h1><p>A clear view of your truck, your journey, and what needs your attention.</p><div class="login-route"><span>Departure</span><b>→</b><span>Arrival</span><b>→</b><span>Return</span></div></div><small>Reliable records. Less follow-up.</small></section>
+<section class="login-form-wrap"><form id="login-form" class="login-form"><span class="eyebrow">WELCOME BACK</span><h2>Sign in to your workspace</h2><p class="muted">Your operations, in one place.</p><label>Username<input name="username" autocomplete="username" required maxlength="100"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><p id="login-error" role="alert" class="error"></p><button class="primary" type="submit">Sign in <span>→</span></button><p class="fine">Use the account created during setup or assigned by your administrator.</p></form></section>
+</div>
+<div id="workspace" hidden>
+<aside class="sidebar"><a class="brand" href="#dashboard">▰ <span>TruckTrack<span class="brand-dot">.</span></span></a><span class="nav-caption">WORKSPACE</span><nav id="navigation"></nav><div class="sidebar-bottom"><span class="live-dot"></span> Local operations<div class="fine">Desktop workspace · Phase 1</div></div></aside>
+<div class="main-wrap"><header class="topbar"><div><span class="breadcrumb">Workspace / </span><span id="breadcrumb">Overview</span></div><div class="account"><span id="user-name"></span><span id="user-role" class="badge"></span><button id="logout" class="quiet">Sign out</button></div></header><main id="content" tabindex="-1"></main></div>
+</div>
+<div id="toast" class="toast" hidden role="status"></div>
+<dialog id="modal"><div class="dialog-head"><h2 id="modal-title"></h2><button id="close-modal" class="quiet" aria-label="Close dialog">✕</button></div><div id="modal-content"></div></dialog>
+</body></html>
