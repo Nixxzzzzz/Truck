@@ -19,3 +19,5 @@ if render_hostname and render_hostname not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(render_hostname)
 if '*.onrender.com' not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append('*.onrender.com')
+if 'truck-x98i.onrender.com' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('truck-x98i.onrender.com')
