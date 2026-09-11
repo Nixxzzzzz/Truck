@@ -2,7 +2,7 @@
 
 TruckTrack is a FastAPI and SQLite transport operations app for driver punches, truck-code assignment verification, route-based delay tracking, director reporting, admin management, and auditable corrections.
 
-This repository is GitHub-ready: it includes Docker deployment files, an Oracle Cloud Always Free guide, a Render blueprint, and GitHub Actions CI.
+This repository is GitHub-ready: it includes Docker deployment files, a Render deployment guide and blueprint, an Oracle Cloud fallback guide, and GitHub Actions CI.
 
 **Verification status:** 38 rule/security/request-schema tests passed and Python/JavaScript syntax checks passed. Full FastAPI/SQLAlchemy integration, migrations, live startup and browser layout could not be verified in the build environment because dependency installation and browser localhost access were blocked. Read docs/testing.md before treating this as a verified release. No production-readiness certification is claimed.
 
@@ -38,7 +38,7 @@ docker run --rm -p 8000:8000 `
 	trucktrack
 ```
 
-For cloud deployment, set `DATABASE_URL` to a managed PostgreSQL connection string, keep `COOKIE_SECURE=true`, and add your deployed hostname to `ALLOWED_HOSTS`. The included `render.yaml` blueprint is a ready-made Render option using Docker plus a managed database. If you chose Oracle Cloud Always Free, follow [docs/oracle-deployment.md](docs/oracle-deployment.md) instead.
+For cloud deployment, Render is the primary path. Follow [docs/render-deployment.md](docs/render-deployment.md) and use the included [render.yaml](render.yaml) blueprint. If Render blueprint database creation is not available on your account, create a PostgreSQL database manually and set `DATABASE_URL` in the service settings. If you chose Oracle Cloud Always Free, follow [docs/oracle-deployment.md](docs/oracle-deployment.md) instead.
 
 The first deployed boot can create the admin user automatically if `ADMIN_USERNAME`, `ADMIN_NAME`, and `ADMIN_PASSWORD` are provided as secrets. After that, remove those secrets or leave them unset.
 
