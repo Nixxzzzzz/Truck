@@ -13,4 +13,9 @@ COOKIE_SECURE = os.getenv('COOKIE_SECURE', 'false').lower() == 'true'
 SESSION_HOURS = int(os.getenv('SESSION_HOURS', '12'))
 if not 1 <= SESSION_HOURS <= 168:
     raise ValueError('SESSION_HOURS must be 1–168')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',')
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver,*.onrender.com').split(',') if host.strip()]
+render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname and render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_hostname)
+if '*.onrender.com' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('*.onrender.com')
